@@ -1,0 +1,34 @@
+---
+- hosts: all
+  become: yes
+#  vars:
+#     pass_exp_excluded_users:
+#        - ansible
+#     lock_user_list:
+#        - test1
+#        - test2
+#     ex_ansible_user: ansible
+#     change_all_user: false
+  roles: 
+    - role: poc.hardening.rhel7_hardening
+
+  tasks:
+    - name: Unset password expiration for pass_exp_excluded_users list
+      shell: chage --maxdays 99999 {{ item }}
+      changed_when: false
+      loop: "{{ pass_exp_excluded_users }}"
+      when: pass_exp_excluded_users is defined
+
+    - name: "Force user to change password first login"
+      shell: chage -d0 {{ item }}
+      loop: "{{ rhel7cis_passwd | selectattr('uid', '>=', 1000) | map(attribute='id') | list }}"
+      when:
+        - item != "nfsnobody"
+        - item != ex_ansible_user
+        - change_all_user|bool  == true|bool
+
+    - name: "Multi User | Force user to change password first login"
+      shell: chage -d0 {{ item }}
+      loop: "{{ lock_user_list.split('\n') }}"
+      #loop: "{{ lock_user_list }}"
+      when: lock_user_list != ''

@@ -1,0 +1,18 @@
+---
+rhel7cis_warning_banner: |
+    Authorized uses only. All activity may be monitored and reported.
+
+rhel7cis_pass:
+    max_days: 90
+    min_days: 0
+    warn_age: 14
+
+# PAM
+cis_pwfailed_attempts: "3" # Number of failed login attempts before account locked
+cis_pwunlock_time: "60" # Time in seconds before the login attempt can be tried again without auto failing
+cis_pwreuse_number: "3" # Ensure password reuse is limited to this number
+
+
+rhel7cis_sshd:
+    clientalivecountmax: 0
+    clientaliveinterval: 60

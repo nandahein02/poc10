@@ -1,0 +1,58 @@
+---
+- hosts: all
+  tasks:
+
+  #vars:
+  #  reboot_confirmation: true
+
+    - block:
+        - name: update all advisories - {{ rh_advisory }}
+          ansible.builtin.shell: "env yum update --{{ rh_advisory }} -y"
+          when: rh_advisory is defined
+
+        - name: update advisories
+          ansible.builtin.shell: "env yum update --advisory={{ rh_advisories }} -y"
+          when: rh_advisories != ''
+
+        - name: update cve
+          ansible.builtin.shell: "yum update --cve={{ rh_cves }} -y"
+          when: rh_cves != ''
+
+        - name: update packages for RHEL
+          ansible.builtin.yum:
+            name: "{{ packages.split('\n') }}"
+            state: latest
+            update_cache: yes
+          when: packages != ''
+      when: ansible_facts['distribution'] == 'RedHat'
+
+    - block:
+        - name: update yum-utils
+          ansible.builtin.yum:
+            name: yum-utils
+            state: latest
+
+        - name: check if a reboot required for RHEL
+          ansible.builtin.command: needs-restarting -r
+          register: result
+          failed_when: false
+
+        - name: display result
+          ansible.builtin.debug:
+            msg: "System reboot is required!"
+          when: result.rc == 1
+          changed_when: result.rc == 1
+          register: ouptut_message
+        
+        - name: reboot the server
+          ansible.builtin.reboot:
+          when:
+            - reboot_confirmation == 'yes'
+            - ouptut_message is changed
+      when: check_reboot == 'yes' and ansible_facts['distribution'] == 'RedHat'
+
+    #- block:
+    #    - name: Reboot the server
+    #      ansible.builtin.reboot:
+    #      when: result.rc == 1
+    #  when: (check_reboot == 'yes' and reboot_confirmation == 'yes') and ansible_facts['distribution'] == 'RedHat'

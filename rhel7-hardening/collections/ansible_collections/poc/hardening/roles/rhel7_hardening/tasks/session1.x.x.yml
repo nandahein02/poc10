@@ -1,0 +1,63 @@
+---
+- name: "1.1.1.1 | L1 | PATCH | Ensure mounting of cramfs filesystems is disabled "
+  block:
+      - name: "1.1.1.1 | L1 | PATCH | Ensure mounting of cramfs filesystems is disabled | Edit modprobe config"
+        lineinfile:
+            dest: /etc/modprobe.d/CIS.conf
+            regexp: "^(#)?install cramfs(\\s|$)"
+            line: "install cramfs /bin/true"
+            create: yes
+            mode: '0600'
+
+      - name: "1.1.1.1 | L1 | PATCH | Remove cramfs module"
+        modprobe:
+            name: cramfs
+            state: absent
+
+- name: "1.7.1 | L1 | PATCH | Ensure message of the day is configured properly"
+  template:
+      src: motd.j2
+      dest: /etc/motd
+      owner: root
+      group: root
+      mode: 0644
+
+- name: "1.7.2 | L1 | PATCH | Ensure local login warning banner is configured properly"
+  template:
+      src: issue.j2
+      dest: /etc/issue
+      owner: root
+      group: root
+      mode: 0644
+
+- name: "1.7.3 | L1 | PATCH | Ensure remote login warning banner is configured properly"
+  template:
+      src: issue.net.j2
+      dest: /etc/issue.net
+      owner: root
+      group: root
+      mode: 0644
+
+- name: "1.7.4 | L1 | PATCH | Ensure permissions on /etc/motd are configured"
+  file:
+      dest: /etc/motd
+      state: file
+      owner: root
+      group: root
+      mode: 0644
+
+- name: "1.7.5 | L1 | PATCH | Ensure permissions on /etc/issue are configured"
+  file:
+      dest: /etc/issue
+      state: file
+      owner: root
+      group: root
+      mode: 0644
+
+- name: "1.7.6 | L1 | PATCH | Ensure permissions on /etc/issue.net are configured"
+  file:
+      dest: /etc/issue.net
+      state: file
+      owner: root
+      group: root
+      mode: 0644
