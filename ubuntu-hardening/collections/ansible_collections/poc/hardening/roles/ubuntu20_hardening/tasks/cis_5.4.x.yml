@@ -1,0 +1,54 @@
+---
+- name: "AUTOMATED | 5.4.1 | PATCH | Ensure password creation requirements are configured"
+  block:
+    - name: "AUTOMATED | 5.4.1 | PATCH | Ensure password creation requirements are configured | Install pam_pwquality module"
+      apt:
+        name: libpam-pwquality
+        state: present
+
+    - name: 5.4.1 Ensure password creation requirements are configured
+      lineinfile:
+        state: present
+        create: yes
+        path: /etc/security/pwquality.conf
+        regexp: "^{{ item.key }}"
+        line: "{{ item.key }} = {{ item.value }}"
+      with_items:
+        - { key: "minlen", value: "14" }
+        - { key: 'minclass', value: '4' }
+        - { key: "dcredit", value: "0" }
+        - { key: "ucredit", value: "0" }
+        - { key: "ocredit", value: "0" }
+        - { key: "lcredit", value: "0" }
+
+- name: 5.4.2 Ensure lockout for failed password attempts is configured
+  block:
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | common-auth
+      lineinfile:
+        path: /etc/pam.d/common-auth
+        insertbefore: '^auth\s+\[success=1'
+        #insertafter: '^# here are the per-package'
+        line: "auth required pam_tally2.so onerr=fail audit silent deny={{ ubtu20cis_pamd_deny }} unlock_time={{ ubtu20cis_pamd_unlock_time }}"
+
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_deny.so
+      lineinfile:
+        path: /etc/pam.d/common-account
+        regexp: '^account\srequisite'
+        line: "account requisite pam_deny.so"
+
+    - name: 5.4.2 Ensure lockout for failed password attempts is configured | pam_tally2.so
+      lineinfile:
+        path: /etc/pam.d/common-account
+        regexp: '^account\srequired'
+        line: "account required pam_tally2.so"
+
+- name: 5.4.3 Ensure password reuse is limited
+  lineinfile:
+    path: /etc/pam.d/common-password
+    line: "password required pam_pwhistory.so remember={{ ubtu20cis_pamd_pwhistory_remember }}"
+
+- name: 5.4.4 Ensure password hashing algorithm is SHA-512
+  lineinfile:
+    path: /etc/pam.d/common-password
+    regexp: '^password\s+\[success'
+    line: "password [success=1 default=ignore] pam_unix.so sha512"

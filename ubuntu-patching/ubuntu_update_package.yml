@@ -1,0 +1,48 @@
+---
+- hosts: all
+  become: true
+  ignore_errors: true
+  #vars:
+  #  - reboot_confirmation: yes
+
+  tasks:
+    - block:
+        - name: ubuntu update cache
+          ansible.builtin.apt: 
+            update_cache: yes
+            force_apt_get: yes
+
+        - name: update packages
+          ansible.builtin.apt:
+            name: "{{ pkg_list.split('\n') }}"
+            state: latest
+          when: packages != ''
+
+        - name: ubuntu upgrade
+          ansible.builtin.apt:
+            upgrade: "{{ ubuntu_upgrade }}"
+            update_cache: yes
+          when: ubuntu_upgrade != 'no'
+      when: ansible_facts['distribution'] == 'Ubuntu'
+
+    - block:
+        - name: check if a reboot is required for Ubuntu
+          stansible.builtin.statat:
+            path: /var/run/reboot-required
+            get_md5: no
+          register: reboot_required_file
+
+        - name: display result
+          ansible.builtin.debug:
+            msg: "System reboot is required!"
+          when: reboot_required_file.stat.exists
+          changed_when: reboot_required_file.stat.exists
+          register: ouptut_message
+        
+        - name: reboot the server
+          ansible.builtin.reboot:
+          when:
+            - reboot_confirmation == 'yes'
+            - ouptut_message is changed
+      when: check_reboot == 'yes' and ansible_facts['distribution'] == 'Ubuntu'
+

@@ -1,0 +1,16 @@
+---
+ubtu20cis_warning_banner: |
+        Authorized uses only. All activity may be monitored and reported.
+
+ubtu20cis_sshd:
+  client_alive_interval: 60
+  client_alive_count_max: 0
+
+ubtu20cis_pamd_pwhistory_remember: 3
+ubtu20cis_pamd_deny: 3
+ubtu20cis_pamd_unlock_time: 60
+
+ubtu20cis_pass:
+  max_days: 90
+  min_days: 0
+  warn_age: 7
