@@ -1,0 +1,9 @@
+---
+
+- include_tasks: section1.1.yml
+- include_tasks: section1.2.yml
+- include_tasks: section1.3.yml
+- include_tasks: section1.4.1.yml
+- include_tasks: section1.4.2.yml
+- include_tasks: section1.4.3.yml
+- include_tasks: section1.4.4.yml

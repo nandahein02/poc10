@@ -1,0 +1,18 @@
+# 1.2. Account Lockout Policy 
+- name: "1.2.2,CCE-36008-1 | Ensure 'Account lockout threshold' is set to '10 or fewer invalid logon attempt(s), but not 0'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: LockoutBadCount
+    value: "{{ LockoutBadCount_value }}"
+
+- name: "1.2.1,CCE-37034-6 | Ensure 'Account lockout duration' is set to '15 or more minute(s)' [GSA-30]"
+  community.windows.win_security_policy:
+    section: System Access
+    key: LockoutDuration
+    value: "{{ LockoutDuration_value }}"
+
+- name: "1.2.3,CCE-36883-7 | Ensure 'Reset account lockout counter after' is set to '15 or more minute(s)'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: ResetLockoutCount
+    value: "{{ ResetLockoutCount_value }}"

@@ -1,0 +1,42 @@
+---
+# section 1.1
+PasswordHistorySize_value: 3
+MaximumPasswordAge_value: 90
+MinimumPasswordAge_value: 0
+MinimumPasswordLength_value: 8
+PasswordComplexity_value: 1
+ClearTextPassword_value: 0
+
+# section 1.2
+LockoutBadCount_value: 3
+LockoutDuration_value: 30
+ResetLockoutCount_value: 30
+
+# section 1.4.1
+accountlogin_type: success, failure
+account_management_type: success, failure
+directory_service_type: success, failure
+logon_events_type: success, failure
+object_access_type: success, failure
+policy_change_type: success, failure
+privilege_use_type: success, failure
+detailed_tracking_type: success, failure
+system_type: success, failure
+
+# section 1.4.2
+application_group_management_type: success, failure
+computer_account_management_type: success, failure
+distribution_group_management_type: success, failure
+other_account_management_events_type: success, failure
+security_group_management_type: success, failure
+user_account_management_type: success, failure
+
+# section 1.4.3
+account_lockout_type: success
+logoff_type: success
+logon_type: success, failure
+other_logon_off_events_type: success, failure
+special_logon_type: success
+
+# section 1.4.4
+authentication_policy_change_type: success

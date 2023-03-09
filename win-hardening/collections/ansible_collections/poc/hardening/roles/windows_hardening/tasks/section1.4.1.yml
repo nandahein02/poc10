@@ -1,0 +1,45 @@
+# 1.4.1 Audit Policy
+- name: "Audit account logon events"
+  community.windows.win_audit_policy_system:
+    category: Account logon
+    audit_type: "{{ accountlogin_type }}"
+
+- name: "Audit account management"
+  community.windows.win_audit_policy_system:
+    category: Account management
+    audit_type: "{{ account_management_type }}"
+
+- name: "Audit directory service access"
+  community.windows.win_audit_policy_system:
+    category: DS Access
+    audit_type: "{{ directory_service_type }}"
+
+- name: "Audit logon events"
+  community.windows.win_audit_policy_system:
+    category: Logon/Logoff
+    audit_type: "{{ logon_events_type }}"
+
+- name: "Audit object access"
+  community.windows.win_audit_policy_system:
+    category: Object Access
+    audit_type: "{{ object_access_type }}"
+
+- name: "Audit policy change"
+  community.windows.win_audit_policy_system:
+    category: Policy Change
+    audit_type: "{{ policy_change_type }}"
+
+- name: "Audit privilege use"
+  community.windows.win_audit_policy_system:
+    category: Privilege Use
+    audit_type: "{{ privilege_use_type }}"
+
+- name: "Audit process tracking"
+  community.windows.win_audit_policy_system:
+    category: Detailed Tracking
+    audit_type: "{{ detailed_tracking_type }}"
+
+- name: "Audit system events"
+  community.windows.win_audit_policy_system:
+    category: system
+    audit_type: "{{ system_type }}"

@@ -1,0 +1,6 @@
+# 1.4.4 Policy Change
+
+- name: "17.7.2,CCE-38327-3 | Ensure 'Audit Authentication Policy Change' is set to 'Success'"
+  community.windows.win_audit_policy_system:
+    subcategory: Authentication Policy Change
+    audit_type: "{{ authentication_policy_change_type }}"

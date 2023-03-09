@@ -1,0 +1,45 @@
+# 1.3 User Rights Assignment 
+- name: "2.2.7,CCE-37072-6 | Configure 'Allow log on through Remote Desktop Services'"
+  ansible.windows.win_user_right:
+    name: SeRemoteInteractiveLogonRight
+    users:
+    - Administrators
+    - Remote Desktop Users
+    action: set
+
+- name: "2.2.9,CCE-37452-0 | Ensure 'Change the system time' is set to 'Administrators, LOCAL SERVICE'"
+  ansible.windows.win_user_right:
+    name: SeSystemTimePrivilege
+    users:
+    - Administrators
+    - Local Service
+    action: set
+
+- name: "2.2.10,CCE-37700-2 | Ensure 'Change the time zone' is set to 'Administrators, LOCAL SERVICE'"
+  ansible.windows.win_user_right:
+    name: SeTimeZonePrivilege
+    users:
+    - Administrators
+    - Local Service
+    action: set
+
+- name: "2.2.21,CCE-36867-0 | Ensure 'Deny log on through Remote Desktop Services' to include 'Guests'"
+  ansible.windows.win_user_right:
+    name: SeDenyRemoteInteractiveLogonRight
+    users:
+    - Guests
+    action: set
+
+- name: "2.2.23,CCE-37877-8 | Ensure 'Force shutdown from a remote system' is set to 'Administrators'"
+  ansible.windows.win_user_right:
+    name: SeRemoteShutdownPrivilege
+    users:
+    - Administrators
+    action: set
+
+- name: "2.2.38,CCE-38328-1 | Ensure 'Shut down the system' is set to 'Administrators'"
+  ansible.windows.win_user_right:
+    name: SeShutdownPrivilege
+    users:
+    - Administrators
+    action: set

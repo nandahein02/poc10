@@ -1,0 +1,20 @@
+---
+- hosts: all
+  gather_facts: false
+
+  tasks:
+    - name: checking updates
+      ansible.windows.win_updates:
+        category_names: "{{ win_update_category }}"
+        state: searched
+      register: available_updates
+
+    - debug:
+        msg: |
+          {{ inventory_hostname }} has {{ available_updates.found_update_count }} updates available.
+          {% for update in updates %}
+            - {{ update.title }}
+          {% endfor %}
+      vars:
+        updates: "{{ (available_updates.updates.values() | list) if (available_updates.updates is mapping) else (available_updates.updates) }}"
+      when: available_updates.updates is defined

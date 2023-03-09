@@ -1,0 +1,29 @@
+---
+- hosts: all
+  gather_facts: false
+  #vars:
+  #  win_update_category: 
+  #    - CriticalUpdates
+  #    - SecurityUpdates
+  #    - UpdateRollups
+  #    - Definition Updates
+  #  kb_list:
+  #    - KB561234
+  #  automatic_reboot_after_update: false
+
+  tasks:
+    - name: Install windows updates as many times as needed
+      ansible.windows.win_updates:
+        category_names: "{{ win_update_category }}"
+        accept_list: "{{ kb_list.split('\n')  | default(omit) }}"
+        reboot: "{{ automatic_reboot_after_update }}"
+        reboot_timeout: 2500
+      register: output_update
+
+    - debug:
+         var: output_update
+
+    - debug:
+        msg: |
+          Reboot Required for {{ inventory_hostname }}
+      when: output_update.reboot_required == true

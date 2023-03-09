@@ -1,0 +1,36 @@
+# 1.1 Password Policy
+- name: "1.1.1,CCE-37166-6 | Ensure 'Enforce password history' is set to '24 or more password(s)'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: PasswordHistorySize
+    value: "{{ PasswordHistorySize_value }}"
+
+- name: "1.1.2,CCE-37167-4 | Ensure 'Maximum password age' is set to '60 or fewer days, but not 0'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: MaximumPasswordAge
+    value: "{{ MaximumPasswordAge_value }}"
+
+- name: "1.1.3,CCE-37073-4 | Ensure 'Minimum password age' is set to '1 or more day(s)'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: MinimumPasswordAge
+    value: "{{ MinimumPasswordAge_value }}"
+
+- name: "1.1.4,CCE-36534-6 | Ensure 'Minimum password length' is set to '8 or more character(s)'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: MinimumPasswordLength
+    value: "{{ MinimumPasswordLength_value }}"
+
+- name: "1.1.5,CCE-37063-5 | Ensure 'Password must meet complexity requirements' is set to 'Enabled'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: PasswordComplexity
+    value: "{{ PasswordComplexity_value }}"
+
+- name: "1.1.6,CCE-36286-3 | Ensure 'Store passwords using reversible encryption' is set to 'Disabled'"
+  community.windows.win_security_policy:
+    section: System Access
+    key: ClearTextPassword
+    value: "{{ ClearTextPassword_value }}"

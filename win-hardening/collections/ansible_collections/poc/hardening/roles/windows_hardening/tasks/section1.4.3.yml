@@ -1,0 +1,26 @@
+# 1.4.3 Logon/Logoff
+
+- name: "17.5.1,CCE-37133-6 | Ensure 'Audit Account Lockout' is set to 'Success'"
+  community.windows.win_audit_policy_system:
+    subcategory: Account Lockout
+    audit_type: "{{ account_lockout_type }}"
+
+- name: "17.5.3,CCE-38237-4 | Ensure 'Audit Logoff' is set to 'Success'"
+  community.windows.win_audit_policy_system:
+      subcategory: Logoff
+      audit_type: "{{ logoff_type }}"
+
+- name: "17.5.4,CCE-38036-0 | Ensure 'Audit Logon' is set to 'Success and Failure'"
+  community.windows.win_audit_policy_system:
+      subcategory: Logon
+      audit_type: "{{ logon_type }}"
+
+- name: "17.5.5,CCE-36322-6 | Ensure 'Audit Other Logon/Logoff Events' is set to 'Success and Failure'"
+  community.windows.win_audit_policy_system:
+    subcategory: Other Logon/Logoff Events
+    audit_type: "{{ other_logon_off_events_type }}"
+
+- name: "17.5.6,CCE-36266-5 | Ensure 'Audit Special Logon' is set to 'Success'"
+  community.windows.win_audit_policy_system:
+    subcategory: Special Logon
+    audit_type: "{{ special_logon_type }}"
